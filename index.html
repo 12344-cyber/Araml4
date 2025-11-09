@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>النظام المتكامل لخط الرمل الإدريسي</title>
+    <style>
+        :root {
+            --primary: #1a237e;
+            --secondary: #ffd700;
+            --light-bg: #f8f8f8;
+            --card-bg: #fff;
+            --success: #1b7a1b;
+            --failure: #b31b1b;
+            --neutral: #666;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--light-bg);
+            color: #333;
+            direction: rtl;
+            text-align: right;
+            line-height: 1.6;
+            padding: 10px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: var(--secondary);
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 0;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            max-width: 800px;
+            margin: 0 auto 20px;
+            padding: 0 20px;
+            font-size: 16px;
+        }
+        
+        .tabs {
+            display: flex;
+            background-color: var(--primary);
+            border-radius: 0;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background-color: var(--primary);
+            color: var(--secondary);
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .tab:hover {
+            background-color: #283593;
+        }
+        
+        .tab.active {
+            background-color: var(--secondary);
+            color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .intro-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: #f0f8ff;
+            border-radius: 8px;
+            border-right: 4px solid var(--primary);
+        }
+        
+        .intro-section h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .intro-section ul {
+            margin-right: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .intro-section li {
+            margin-bottom: 8px;
+        }
+        
+        .warning-box {
+            background-color: #fff8e1;
+            border: 1px solid #ffd54f;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .steps-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .step-card {
+            flex: 1;
+            min-width: 200px;
+            background-color: #e8eaf6;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            line-height: 30px;
+            margin-bottom: 10px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+        
+        .cell {
+            background: #fff;
+            border: 1px solid #e3d9c8;
+            border-radius: 8px;
+            padding: 8px;
+            min-height: 84px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .line-btn {
+            width: 100%;
+            padding: 8px 6px;
+            border-radius: 6px;
+            border: 0;
+            background: #f6e8cf;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        
+        .line-btn:disabled {
+            opacity: .6;
+            cursor: default;
+        }
+        
+        .dots {
+            height: 34px;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 6px;
+        }
+        
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #333;
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .result {
+            margin-top: 6px;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        #resultsBox {
+            margin-top: 18px;
+            font-size: 16px;
+            text-align: center;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #e3d9c8;
+        }
+        
+        #reset {
+            margin-top: 14px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: 0;
+            background: #ffd580;
+            cursor: pointer;
+            font-weight: 700;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        .res-1 { color: var(--success); }
+        .res-2 { color: var(--failure); }
+        
+        .extraction-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .input-grid input {
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .action-buttons button {
+            padding: 12px 24px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .action-buttons button:hover {
+            background-color: #283593;
+        }
+        
+        .extraction-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #00008b;
+            color: var(--secondary);
+        }
+        
+        .extraction-table th, .extraction-table td {
+            border: 2px solid var(--secondary);
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .reading-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            text-align: right;
+            direction: rtl;
+        }
+        
+        .auto-calculated {
+            background-color: #f0f0f0;
+            color: #666;
+        }
+        
+        .reading-button {
+            background-color: var(--primary);
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        
+        .reading-button:hover {
+            background-color: #1558b3;
+        }
+        
+        #reading-result {
+            margin-top: 25px;
+            padding: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            background-color: #e8f0fe;
+            line-height: 1.8;
+        }
+        
+        .rule-box {
+            background-color: #e6e6e6;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-right: 4px solid var(--primary);
+        }
+        
+        .rule-box h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+        
+        .success { color: var(--success); font-weight: bold; }
+        .failure { color: var(--failure); font-weight: bold; }
+        .neutral { color: var(--neutral); font-weight: bold; }
+        
+        .data-transfer {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            border: 1px dashed #4caf50;
+        }
+        
+        .data-transfer button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+            font-size: 14px;
+        }
+        
+        .data-transfer button:hover {
+            background-color: #388e3c;
+        }
+        
+        .shape-analysis {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-right: 3px solid var(--primary);
+        }
+        
+        .shape-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+        
+        .result-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-right: 4px solid var(--primary);
+        }
+        
+        .result-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary);
+            font-size: 18px;
+        }
+        
+        .interpretation-box {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-right: 4px solid #ffc107;
+        }
+        
+        .interpretation-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #856404;
+            font-size: 18px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .input-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .steps-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🔮 النظام المتكامل لخط الرمل الإدريسي</h1>
+        <p class="description">أداة متكاملة لرسم خط الرمل واستخراج البيوت الإدريسية وقراءة النتائج وفق القواعد الأصلية</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab active" onclick="openTab('tab0')">المقدمة والشروط</button>
+        <button class="tab" onclick="openTab('tab1')">1. خط الرمل</button>
+        <button class="tab" onclick="openTab('tab2')">2. استخراج البيوت</button>
+        <button class="tab" onclick="openTab('tab3')">3. القراءة والتفسير</button>
+    </div>
+
+    <!-- قسم المقدمة والشروط -->
+    <div id="tab0" class="tab-content active">
+        <h2>🔮 مقدمة في علم خط الرمل الإدريسي</h2>
+        
+        <div class="intro-section">
+            <h3>📜 النية والشروط</h3>
+            <p>قبل البدء في استخدام النظام، يجب مراعاة ما يلي:</p>
+            <ul>
+                <li><strong>النية الصادقة:</strong> يجب أن تكون النية خالصة لله تعالى وطلب المعرفة والهداية</li>
+                <li><strong>الطهارة:</strong> يُستحب الوضوء قبل البدء في عملية الرمل</li>
+                <li><strong>التركيز:</strong> يجب أن يكون الذهن صافياً وخالياً من المشتتات</li>
+                <li><strong>الوقت المناسب:</strong> يُفضل اختيار وقت الهدوء والصفاء الذهني</li>
+                <li><strong>عدم السخرية:</strong> يجب التعامل مع العلم بجدية واحترام</li>
+            </ul>
+            
+            <div class="warning-box">
+                <h4>⚠️ تنبيه هام</h4>
+                <p>هذا النظام هو أداة مساعدة لفهم أساسيات علم الرمل الإدريسي، ولا يغني عن الدراسة المتخصصة تحت إشراف علماء متخصصين في هذا المجال.</p>
+            </div>
+        </div>
+        
+        <div class="intro-section">
+            <h3>🔄 طريقة استخدام النظام</h3>
+            <p>يتكون النظام من أربع مراحل رئيسية:</p>
+            
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h4>المقدمة والشروط</h4>
+                    <p>قراءة الشروط والنية الصحيحة قبل البدء</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h4>خط الرمل</h4>
+                    <p>رسم 16 خطاً بالنقر على الأزرار بالترتيب</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h4>استخراج البيوت</h4>
+                    <p>تحويل الخطوط إلى بيوت إدريسية وحساب الشواهد والقاضي</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h4>القراءة والتفسير</h4>
+                    <p>تحليل النتائج وفق القواعد الإدريسية المعتمدة</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="intro-section">
+            <h3>📖 القواعد الأصلية لصدق الخط الإدريسي</h3>
+            <p>يعتمد النظام الإدريسي الأصلي على قاعدتين أساسيتين:</p>
+            <ul>
+                <li><strong>القاعدة الأولى (صدق الخط):</strong> إذا كان القاضي يوافق أحد الشاهدين في 3 أو 4 خانات → الخط صادق</li>
+                <li><strong>القاعدة الثانية (تأكيد المسار):</strong> إذا تشابهت العاقبة (القاضي) مع الطالع في 3 أو 4 خانات → تأكيد أقوى للصدق</li>
+            </ul>
+            <p>هذه هي القواعد الأصلية دون إضافات تفسيرية.</p>
+        </div>
+    </div>
+
+    <!-- قسم خط الرمل -->
+    <div id="tab1" class="tab-content">
+        <h2>🔮 رسم خط الرمل</h2>
+        <p>انقر على الأزرار بالترتيب لرسم النقاط (من 1 إلى 16). بعد الانتهاء، انتقل إلى قسم استخراج البيوت.</p>
+        
+        <div class="grid" id="grid"></div>
+        <div id="resultsBox">النتائج: <span id="seq">- | - | - | - | - | - | - | - | - | - | - | - | - | - | - | -</span></div>
+        <button id="reset">مسح الكل وإعادة البدء</button>
+        
+        <div class="data-transfer">
+            <p>بعد اكتمال رسم الخط، انقل النتائج إلى قسم استخراج البيوت:</p>
+            <button onclick="transferToExtraction()">نقل النتائج إلى استخراج البيوت</button>
+        </div>
+    </div>
+
+    <!-- قسم استخراج البيوت -->
+    <div id="tab2" class="tab-content">
+        <h2>🟦 استخراج البيوت الإدريسية</h2>
+        <p>أدخل 16 رقمًا (1 أو 2) سطرًا بسطر، أو استخدم نتائج خط الرمل:</p>
+        
+        <div class="extraction-container">
+            <div class="input-grid" id="extractionInputs">
+                <!-- سيتم ملؤها بالجافاسكريبت -->
+            </div>
+            
+            <div class="action-buttons">
+                <button onclick="extractHouses()">استخراج البيوت</button>
+                <button onclick="downloadExtraction()">تنزيل النتيجة</button>
+            </div>
+            
+            <div id="extractionResult"></div>
+            
+            <div class="data-transfer">
+                <p>بعد استخراج البيوت، انقل النتائج إلى قسم القراءة:</p>
+                <button onclick="transferToReading()">نقل النتائج إلى القراءة</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- قسم القراءة والتفسير -->
+    <div id="tab3" class="tab-content">
+        <h2>📖 القراءة والتفسير</h2>
+        
+        <div class="rule-box">
+            <h3>🟤 القاعدة الإدريسية الأصلية لصدق الخط</h3>
+            <p><strong>القاعدة:</strong> إذا كان القاضي يوافق أحد الشاهدين في 3 أو 4 خانات → الخط <span class="success">صادق</span> → الإجابة <span class="success">نعم</span></p>
+            <p><strong>القاعدة:</strong> إذا كان القاضي لا يوافق أي من الشاهدين في 3 خانات فأكثر → الخط <span class="failure">غير صادق</span> → الإجابة <span class="failure">لا</span></p>
+        </div>
+
+        <div class="rule-box">
+            <h3>🔵 القاعدة الإضافية لتأكيد المسار</h3>
+            <p><strong>القاعدة:</strong> إذا تشابهت العاقبة (القاضي) مع الطالع في 3 أو 4 خانات → تأكيد أقوى للصدق</p>
+            <p><strong>القاعدة:</strong> إذا لم تتشابه العاقبة مع الطالع → قراءة النتيجة بحذر</p>
+        </div>
+        
+        <div class="reading-container">
+            <div class="input-group">
+                <label for="judgeShape">شكل القاضي (4 أرقام 1 أو 2):</label>
+                <input type="text" id="judgeShape" maxlength="4" placeholder="سيتم نقله تلقائياً" class="auto-calculated" readonly>
+            </div>
+            
+            <div class="input-group">
+                <label for="witnessRShape">شكل الشاهد الأيمن (4 أرقام 1 أو 2):</label>
+                <input type="text" id="witnessRShape" maxlength="4" placeholder="سيتم نقله تلقائياً" class="auto-calculated" readonly>
+            </div>
+            
+            <div class="input-group">
+                <label for="witnessLShape">شكل الشاهد الأيسر (4 أرقام 1 أو 2):</label>
+                <input type="text" id="witnessLShape" maxlength="4" placeholder="سيتم نقله تلقائياً" class="auto-calculated" readonly>
+            </div>
+
+            <div class="input-group">
+                <label for="firstMother">شكل الطالع (الأم الأولى) (4 أرقام 1 أو 2):</label>
+                <input type="text" id="firstMother" maxlength="4" placeholder="سيتم نقله تلقائياً" class="auto-calculated">
+            </div>
+
+            <button class="reading-button" onclick="readRamlLine()">إجراء القراءة</button>
+
+            <div id="reading-result">سيظهر التحليل والقراءة التفصيلية هنا...</div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ========== المتغيرات العامة ==========
+let ramlResults = new Array(16).fill(null); // نتائج خط الرمل
+let extractionData = {}; // بيانات الاستخراج
+
+// ========== قاموس الأشكال الإدريسية الأصلية ==========
+const ramlShapes = {
+    '1111': { 
+        name: 'البياض (الطريق)', 
+        nature: 'سعيد',
+        element: 'هواء',
+        interpretation: 'صلاح الحال، صفاء، بداية خير، رزق نازل من قدر'
+    },
+    '2222': { 
+        name: 'السواد (الظلمة)', 
+        nature: 'نحس',
+        element: 'تراب',
+        interpretation: 'تعطيل، تأخير، حبس رزق، أو عمل بلا نية صحيحة'
+    },
+    '1212': { 
+        name: 'الاجتماع', 
+        nature: 'سعيد',
+        element: 'ماء',
+        interpretation: 'اجتماع أمرين، تحقق مقصود بعد طول'
+    },
+    '2121': { 
+        name: 'الانصراف', 
+        nature: 'نحس',
+        element: 'نار',
+        interpretation: 'تفرق، انقطاع، نهاية أمر أو فشل وقتي'
+    },
+    '1211': { 
+        name: 'الطريق (الهادي)', 
+        nature: 'سعيد',
+        element: 'هواء',
+        interpretation: 'سفر، حركة، رزق متنقل، هداية للموضع الصحيح'
+    },
+    '2221': { 
+        name: 'النقيّ (الأرضي)', 
+        nature: 'سعيد',
+        element: 'تراب',
+        interpretation: 'رزق أرضي، معادن، ذهب، مال من الأرض أو عمل يدوي'
+    },
+    '1122': { 
+        name: 'القبول', 
+        nature: 'سعيد',
+        element: 'ماء',
+        interpretation: 'قبول عمل أو نية، فتح بعد توسل أو دعاء'
+    },
+    '2111': { 
+        name: 'النصرة', 
+        nature: 'سعيد',
+        element: 'نار',
+        interpretation: 'ظفر بعد تعب، عون من الله بعد سعي'
+    },
+    '1112': { 
+        name: 'الداخل', 
+        nature: 'متوسط',
+        element: 'هواء',
+        interpretation: 'دخول باب جديد، بداية مشروع أو علاقة'
+    },
+    '2211': { 
+        name: 'الخارج', 
+        nature: 'متوسط',
+        element: 'تراب',
+        interpretation: 'خروج من حال إلى حال، أو انتقال رزق'
+    },
+    '1121': { 
+        name: 'العتبة (البيت)', 
+        nature: 'سعيد',
+        element: 'ماء',
+        interpretation: 'باب رزق أو زواج، بيت جديد، استقرار'
+    },
+    '2112': { 
+        name: 'المرأة', 
+        nature: 'سعيد',
+        element: 'تراب',
+        interpretation: 'خير من امرأة، أو مال من جهة أنثى'
+    },
+    '1221': { 
+        name: 'الرجل', 
+        nature: 'سعيد',
+        element: 'هواء',
+        interpretation: 'قوة، حركة، نفع من رجل، تجارة أو عمل'
+    },
+    '2212': { 
+        name: 'الرفض', 
+        nature: 'نحس',
+        element: 'نار',
+        interpretation: 'ردّ أو فشل مؤقت، تأجيل أمر'
+    },
+    '1222': { 
+        name: 'العقبة (المعكوس)', 
+        nature: 'نحs',
+        element: 'ماء',
+        interpretation: 'عائق بسيط، تأجيل، يحتاج صبرًا'
+    },
+    '2122': { 
+        name: 'الخروج (الفتح)', 
+        nature: 'سعيد',
+        element: 'هواء',
+        interpretation: 'انفراج، فرج، خروج من كرب'
+    }
+};
+
+// ========== إدارة التبويبات ==========
+function openTab(tabId) {
+    // إخفاء جميع محتويات التبويبات
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabContents.forEach(tab => tab.classList.remove('active'));
+    
+    // إزالة النشاط من جميع أزرار التبويب
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    // إظهار التبويب المحدد وإضافة النشاط
+    document.getElementById(tabId).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+
+// ========== قسم خط الرمل ==========
+(function(){
+    const grid = document.getElementById('grid');
+    const seqSpan = document.getElementById('seq');
+    const resetBtn = document.getElementById('reset');
+
+    let currentLine = 0;
+    const dotCounts = new Array(16).fill(0);
+    let lastTimeout = null;
+
+    for(let i=0;i<16;i++){
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+
+        const btn = document.createElement('button');
+        btn.className = 'line-btn';
+        btn.textContent = `الخط ${i+1}`;
+        btn.dataset.index = i;
+
+        const dotsWrap = document.createElement('div');
+        dotsWrap.className = 'dots';
+
+        const res = document.createElement('div');
+        res.className = 'result';
+
+        cell.appendChild(btn);
+        cell.appendChild(dotsWrap);
+        cell.appendChild(res);
+        grid.appendChild(cell);
+
+        btn.addEventListener('click', ()=>{
+            const idx = parseInt(btn.dataset.index);
+
+            if(idx !== currentLine){
+                finalizeLine(currentLine);
+                currentLine = idx;
+            }
+
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            dotsWrap.appendChild(dot);
+            dotCounts[idx]++;
+
+            if(idx === 15){
+                if(lastTimeout) clearTimeout(lastTimeout);
+                lastTimeout = setTimeout(()=>{ finalizeLine(15); }, 10000);
+            }
+        });
+    }
+
+    function finalizeLine(idx){
+        if(idx < 0 || ramlResults[idx] !== null) return;
+        const count = dotCounts[idx];
+        if(count === 0) return;
+        const parity = (count % 2 === 0) ? 2 : 1;
+        ramlResults[idx] = parity;
+
+        const resEl = document.querySelectorAll('.result')[idx];
+        const btn = document.querySelectorAll('.line-btn')[idx];
+        resEl.textContent = parity;
+        resEl.classList.add(parity === 1 ? 'res-1' : 'res-2');
+        btn.disabled = true;
+        btn.style.background = (parity === 1)?'#d5f7d5':'#f7d5d5';
+        updateResults();
+    }
+
+    function updateResults(){
+        seqSpan.textContent = ramlResults.map(v=>v===null?'-':v).join(' | ');
+    }
+
+    resetBtn.addEventListener('click', ()=>{
+        dotCounts.fill(0);
+        ramlResults.fill(null);
+        currentLine = 0;
+        if(lastTimeout) clearTimeout(lastTimeout);
+        document.querySelectorAll('.dots').forEach(d=>d.innerHTML='');
+        document.querySelectorAll('.result').forEach(r=>{r.textContent='';r.classList.remove('res-1','res-2');});
+        document.querySelectorAll('.line-btn').forEach(b=>{b.disabled=false;b.style.background='#f6e8cf';});
+        updateResults();
+    });
+
+    updateResults();
+})();
+
+// نقل النتائج من خط الرمل إلى استخراج البيوت
+function transferToExtraction() {
+    // التحقق من اكتمال خط الرمل
+    if (ramlResults.includes(null)) {
+        alert("يرجى إكمال رسم خط الرمل أولاً (جميع الخطوط الـ16)");
+        return;
+    }
+    
+    // نقل النتائج إلى قسم استخراج البيوت
+    for(let i=1;i<=16;i++){
+        document.getElementById('n'+i).value = ramlResults[i-1];
+    }
+    
+    // الانتقال إلى قسم استخراج البيوت
+    openTab('tab2');
+    alert("تم نقل نتائج خط الرمل إلى قسم استخراج البيوت بنجاح!");
+}
+
+// ========== قسم استخراج البيوت ==========
+// تهيئة حقول الإدخال لاستخراج البيوت
+(function(){
+    const extractionInputs = document.getElementById('extractionInputs');
+    for(let i=1;i<=16;i++){
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.min = '1';
+        input.max = '2';
+        input.id = 'n'+i;
+        input.placeholder = i;
+        extractionInputs.appendChild(input);
+        
+        // إضافة سطر جديد كل 4 مدخلات
+        if(i % 4 === 0 && i < 16) {
+            extractionInputs.appendChild(document.createElement('br'));
+        }
+    }
+})();
+
+// دالة مقارنة الأزواج
+function pairCompare(a,b){
+    return (a===b)?2:1;
+}
+
+// استخراج البيوت
+function extractHouses(){
+    const nums = [];
+    for(let i=1;i<=16;i++){
+        const val = parseInt(document.getElementById('n'+i).value);
+        if(val!==1 && val!==2){
+            alert("الرجاء إدخال جميع الأرقام 1 أو 2");
+            return;
+        }
+        nums.push(val);
+    }
+
+    // تكوين الأمهات (كل أم 4 أرقام)
+    const mothers = [
+        nums.slice(0,4),
+        nums.slice(4,8),
+        nums.slice(8,12),
+        nums.slice(12,16)
+    ];
+
+    // تكوين البنات (عمودي من الأمهات)
+    const daughters = [];
+    for(let i=0;i<4;i++){
+        daughters.push([mothers[0][i], mothers[1][i], mothers[2][i], mothers[3][i]]);
+    }
+
+    // تكوين الأخوات
+    const sisters = [
+        mothers[0].map((v,i)=>pairCompare(v,mothers[1][i])),
+        mothers[2].map((v,i)=>pairCompare(v,mothers[3][i])),
+        daughters[0].map((v,i)=>pairCompare(v,daughters[1][i])),
+        daughters[2].map((v,i)=>pairCompare(v,daughters[3][i]))
+    ];
+
+    // تكوين الشاهدين
+    const witnessRight = sisters[0].map((v,i)=>pairCompare(v,sisters[1][i]));
+    const witnessLeft = sisters[2].map((v,i)=>pairCompare(v,sisters[3][i]));
+
+    // القاضي
+    const judge = witnessRight.map((v,i)=>pairCompare(v,witnessLeft[i]));
+
+    // حفظ بيانات الاستخراج للنقل إلى القراءة
+    extractionData = {
+        mothers: mothers,
+        daughters: daughters,
+        sisters: sisters,
+        witnessRight: witnessRight,
+        witnessLeft: witnessLeft,
+        judge: judge
+    };
+
+    // عرض النتائج في جدول
+    const names = ["الأمهات","البنات","الأخوات","الشاهد الأيمن","الشاهد الأيسر","القاضي"];
+    const values = [mothers,daughters,sisters,[witnessRight],[witnessLeft],[judge]];
+
+    let html = "<table class='extraction-table'><tr><th>الاسم</th><th>الأرقام</th></tr>";
+    for(let i=0;i<names.length;i++){
+        if(Array.isArray(values[i][0][0])){ // nested check
+            for(let j=0;j<values[i].length;j++){
+                html+="<tr><td>"+names[i]+" "+(j+1)+"</td><td>"+values[i][j].join("")+"</td></tr>";
+            }
+        } else {
+            for(let j=0;j<values[i].length;j++){
+                html+="<tr><td>"+names[i]+" "+(j+1)+"</td><td>"+values[i][j].join("")+"</td></tr>";
+            }
+        }
+    }
+    html+="</table>";
+    document.getElementById("extractionResult").innerHTML = html;
+}
+
+// تنزيل نتيجة الاستخراج
+function downloadExtraction(){
+    const resultText = document.getElementById("extractionResult").innerText;
+    if (!resultText || resultText.trim() === "") {
+        alert("يرجى استخراج البيوت أولاً");
+        return;
+    }
+    
+    const blob = new Blob([resultText], {type: "text/plain;charset=utf-8"});
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "البيوت_الإدريسية.txt";
+    link.click();
+}
+
+// نقل النتائج من الاستخراج إلى القراءة
+function transferToReading() {
+    if (!extractionData.judge || extractionData.judge.length === 0) {
+        alert("يرجى استخراج البيوت أولاً");
+        return;
+    }
+    
+    // تعيين القاضي والشاهدين في قسم القراءة
+    document.getElementById('judgeShape').value = extractionData.judge.join('');
+    document.getElementById('witnessRShape').value = extractionData.witnessRight.join('');
+    document.getElementById('witnessLShape').value = extractionData.witnessLeft.join('');
+    
+    // تعيين الطالع (الأم الأولى) تلقائياً
+    if (extractionData.mothers && extractionData.mothers[0]) {
+        document.getElementById('firstMother').value = extractionData.mothers[0].join('');
+    }
+    
+    // الانتقال إلى قسم القراءة
+    openTab('tab3');
+    alert("تم نقل نتائج الاستخراج إلى قسم القراءة بنجاح!");
+}
+
+// دالة مساعدة للتحقق من الأرقام وإزالة المسافات
+function sanitizeInput(input) {
+    return input.replace(/[^12]/g, '').trim();
+}
+
+/**
+ * دالة تحسب عدد الخانات المتطابقة بين شكلين.
+ */
+function countMatches(shape1, shape2) {
+    let count = 0;
+    for (let i = 0; i < 4; i++) {
+        if (shape1[i] === shape2[i]) {
+            count++;
+        }
+    }
+    return count;
+}
+
+// دالة تحليل الشكل
+function analyzeShape(shape) {
+    return ramlShapes[shape] || { 
+        name: 'غير معروف', 
+        nature: 'غير محدد',
+        element: 'غير محدد',
+        interpretation: 'لا يوجد تفسير معروف لهذا الشكل'
+    };
+}
+
+// دالة القراءة الرئيسية
+function readRamlLine() {
+    const js = sanitizeInput(document.getElementById('judgeShape').value);
+    const wrs = sanitizeInput(document.getElementById('witnessRShape').value);
+    const wls = sanitizeInput(document.getElementById('witnessLShape').value);
+    const fm = sanitizeInput(document.getElementById('firstMother').value);
+    const resultArea = document.getElementById('reading-result');
+
+    // التحقق من صحة الإدخالات
+    if ([js, wrs, wls, fm].some(s => s.length !== 4) || ![js, wrs, wls, fm].every(s => /^[12]{4}$/.test(s))) {
+        resultArea.innerHTML = "<p class='failure'>⚠️ خطأ في الإدخال: تأكد من إدخال 4 أرقام (1 أو 2) لكل حقل.</p>";
+        return;
+    }
+
+    let output = "";
+
+    // 1. فحص صدق الخط (القاعدة الأساسية)
+    const matchesR = countMatches(js, wrs);
+    const matchesL = countMatches(js, wls);
+    const isLineTrue = (matchesR >= 3) || (matchesL >= 3);
+
+    output += "<div class='result-box'>";
+    output += "<div class='result-title'>📊 نتيجة فحص صدق الخط (القاعدة الأساسية)</div>";
+    
+    if (isLineTrue) {
+        output += `<p>✅ <strong>النتيجة: الخط <span class='success'>صادق وموثوق</span></strong></p>`;
+        output += `<p><strong>التفسير:</strong> القاضي يوافق أحد الشاهدين في ${Math.max(matchesR, matchesL)} من 4 خانات.</p>`;
+        output += `<p>✅ <strong>الإجابة النهائية: <span class='success'>نعم</span></strong></p>`;
+    } else {
+        output += `<p>❌ <strong>النتيجة: الخط <span class='failure'>غير صادق</span></strong></p>`;
+        output += `<p><strong>التفسير:</strong> القاضي لا يوافق أي من الشاهدين في 3 خانات فأكثر.</p>`;
+        output += `<p>❌ <strong>الإجابة النهائية: <span class='failure'>لا</span></strong></p>`;
+    }
+    output += "</div>";
+
+    // 2. فحص العاقبة مقابل الطالع (القاعدة الإضافية)
+    output += "<div class='result-box'>";
+    output += "<div class='result-title'>🔄 نتيجة فحص العاقبة مقابل الطالع</div>";
+    
+    const matchesJudgeFirstMother = countMatches(js, fm);
+    
+    if (matchesJudgeFirstMother >= 3) {
+        output += `<p>✅ <strong>تأكيد قوي:</strong> العاقبة (القاضي) تتشابه مع الطالع في ${matchesJudgeFirstMother} من 4 خانات.</p>`;
+        output += `<p><strong>التفسير:</strong> هذا يؤكد قوة الصدق وفق القاعدة الإضافية.</p>`;
+    } else {
+        output += `<p>⚠️ <strong>ملاحظة:</strong> العاقبة (القاضي) لا تتشابه مع الطالع (${matchesJudgeFirstMother} من 4 خانات فقط).</p>`;
+        output += `<p><strong>التفسير:</strong> رغم أن الخط صادق حسب القاعدة الأساسية، إلا أن عدم تطابق العاقبة مع الطالع قد يدل على حاجة للتحقق.</p>`;
+    }
+    output += "</div>";
+
+    // 3. قراءة الأشكال التفصيلية (القسم الجديد)
+    output += "<div class='result-box'>";
+    output += "<div class='result-title'>🔍 قراءة الأشكال التفصيلية</div>";
+    
+    const judgeAnalysis = analyzeShape(js);
+    const witnessRAnalysis = analyzeShape(wrs);
+    const witnessLAnalysis = analyzeShape(wls);
+    const firstMotherAnalysis = analyzeShape(fm);
+    
+    // القاضي
+    output += `<div class='shape-analysis'>`;
+    output += `<div class='shape-title'>القاضي (${js}) - ${judgeAnalysis.name}</div>`;
+    output += `<p><strong>الطبيعة:</strong> <span class="${judgeAnalysis.nature === 'سعيد' ? 'success' : judgeAnalysis.nature === 'نحس' ? 'failure' : 'neutral'}">${judgeAnalysis.nature}</span></p>`;
+    output += `<p><strong>العنصر:</strong> ${judgeAnalysis.element}</p>`;
+    output += `<p><strong>التفسير:</strong> ${judgeAnalysis.interpretation}</p>`;
+    output += `</div>`;
+    
+    // الشاهد الأيمن
+    output += `<div class='shape-analysis'>`;
+    output += `<div class='shape-title'>الشاهد الأيمن (${wrs}) - ${witnessRAnalysis.name}</div>`;
+    output += `<p><strong>الطبيعة:</strong> <span class="${witnessRAnalysis.nature === 'سعيد' ? 'success' : witnessRAnalysis.nature === 'نحس' ? 'failure' : 'neutral'}">${witnessRAnalysis.nature}</span></p>`;
+    output += `<p><strong>العنصر:</strong> ${witnessRAnalysis.element}</p>`;
+    output += `<p><strong>التفسير:</strong> ${witnessRAnalysis.interpretation}</p>`;
+    output += `</div>`;
+    
+    // الشاهد الأيسر
+    output += `<div class='shape-analysis'>`;
+    output += `<div class='shape-title'>الشاهد الأيسر (${wls}) - ${witnessLAnalysis.name}</div>`;
+    output += `<p><strong>الطبيعة:</strong> <span class="${witnessLAnalysis.nature === 'سعيد' ? 'success' : witnessLAnalysis.nature === 'نحس' ? 'failure' : 'neutral'}">${witnessLAnalysis.nature}</span></p>`;
+    output += `<p><strong>العنصر:</strong> ${witnessLAnalysis.element}</p>`;
+    output += `<p><strong>التفسير:</strong> ${witnessLAnalysis.interpretation}</p>`;
+    output += `</div>`;
+    
+    // الطالع
+    output += `<div class='shape-analysis'>`;
+    output += `<div class='shape-title'>الطالع (${fm}) - ${firstMotherAnalysis.name}</div>`;
+    output += `<p><strong>الطبيعة:</strong> <span class="${firstMotherAnalysis.nature === 'سعيد' ? 'success' : firstMotherAnalysis.nature === 'نحس' ? 'failure' : 'neutral'}">${firstMotherAnalysis.nature}</span></p>`;
+    output += `<p><strong>العنصر:</strong> ${firstMotherAnalysis.element}</p>`;
+    output += `<p><strong>التفسير:</strong> ${firstMotherAnalysis.interpretation}</p>`;
+    output += `</div>`;
+    
+    output += "</div>";
+
+    // 4. عرض الأشكال الأساسية
+    output += "<div class='result-box'>";
+    output += "<div class='result-title'>🔢 الأشكال الأساسية</div>";
+    output += `<p><strong>القاضي:</strong> ${js}</p>`;
+    output += `<p><strong>الشاهد الأيمن:</strong> ${wrs} (التشابه: ${matchesR}/4)</p>`;
+    output += `<p><strong>الشاهد الأيسر:</strong> ${wls} (التشابه: ${matchesL}/4)</p>`;
+    output += `<p><strong>الطالع:</strong> ${fm} (التشابه مع القاضي: ${matchesJudgeFirstMother}/4)</p>`;
+    output += "</div>";
+
+    // 5. القراءة والتفسير بناءً على القواعد الأصلية
+    output += "<div class='interpretation-box'>";
+    output += "<div class='interpretation-title'>📖 القراءة والتفسير النهائي</div>";
+    
+    if (isLineTrue) {
+        output += `<p><strong>القراءة:</strong> الخط صادق حسب القاعدة الإدريسية الأصلية.</p>`;
+        output += `<p><strong>التفسير:</strong> بما أن القاضي يوافق أحد الشاهدين في ${Math.max(matchesR, matchesL)} خانات، فإن الخط يعتبر موثوقاً والإجابة على السؤال هي <strong>نعم</strong>.</p>`;
+        
+        if (matchesJudgeFirstMother >= 3) {
+            output += `<p><strong>تأكيد إضافي:</strong> تشابه العاقبة مع الطالع في ${matchesJudgeFirstMother} خانات يؤكد قوة الصدق ووضوح المسار.</p>`;
+        } else {
+            output += `<p><strong>ملاحظة:</strong> عدم تشابه العاقبة مع الطالع قد يدل على أن النتيجة صحيحة ولكن قد تحتاج لبعض الوقت أو الجهد الإضافي.</p>`;
+        }
+    } else {
+        output += `<p><strong>القراءة:</strong> الخط غير صادق حسب القاعدة الإدريسية الأصلية.</p>`;
+        output += `<p><strong>التفسير:</strong> بما أن القاضي لا يوافق أي من الشاهدين في 3 خانات فأكثر، فإن الخط يعتبر غير موثوق والإجابة على السؤال هي <strong>لا</strong>.</p>`;
+        output += `<p><strong>توصية:</strong> يُنصح بإعادة السؤال بعد التأكد من النية والطهارة.</p>`;
+    }
+    output += "</div>";
+
+    resultArea.innerHTML = output;
+}
+
+// تهيئة الصفحة عند التحميل
+window.onload = function() {
+    // لا توجد تهيئة إضافية مطلوبة
+};
+</script>
+</body>
+</html>
